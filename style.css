@@ -1,0 +1,70 @@
+body {
+    display: grid;
+    background-color: white;
+    grid-template-areas: 
+    "header   header"
+    "about    info"
+    "projects projects";
+    width: 95%;
+    height: 100%;
+}
+
+#header {
+    background-image: linear-gradient(to bottom right, aqua, lightblue);
+    grid-area: header;
+    width: 98vw;
+    height: 5vw;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+#about {
+    display: grid;
+    background-image: linear-gradient(to bottom, lightblue, aqua);
+    grid-area: about;
+    width: 35vw;
+    height: 30vw;
+    text-align: center;
+    margin: 1rem 1rem 1rem 1rem;
+    border: 10px black;
+    border-style: none;
+}
+
+#info {
+    display: grid;
+    background-image: linear-gradient(to bottom left, aqua, lightblue);
+    grid-area: info;
+    width: 55vw;
+    height: 30vw;
+    text-align: center;
+    margin: auto;
+}
+
+#projects {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(to bottom, aqua, lightblue);
+    grid-area: projects;
+    margin: 1rem 1rem 1rem 1rem;
+    width: 98vw;
+    height: 20vw;
+}
+
+#projects div {
+    width: 16vw;
+    height: 16vw;
+    margin: 1vw;
+    margin-right: 10vw;
+    text-align: center;
+}
+
+#projects button {
+    width: 100%;
+    height: 100%;
+}
+
+
+
