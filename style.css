@@ -21,7 +21,7 @@ body {
 
 #about {
     display: grid;
-    background-image: linear-gradient(to bottom, lightblue, aqua);
+    background-color: #f0f1f2;
     grid-area: about;
     width: 35vw;
     height: 30vw;
@@ -33,7 +33,7 @@ body {
 
 #info {
     display: grid;
-    background-image: linear-gradient(to bottom left, aqua, lightblue);
+    background-color: #f0f1f2;
     grid-area: info;
     width: 55vw;
     height: 30vw;
@@ -46,7 +46,7 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-image: linear-gradient(to bottom, aqua, lightblue);
+    background-color: #f0f1f2;
     grid-area: projects;
     margin: 1rem 1rem 1rem 1rem;
     width: 98vw;
