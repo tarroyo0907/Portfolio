@@ -61,8 +61,6 @@ export interface PlanetConfig {
   hoverText?: string;
 }
 
-// extend({ OutlineMaterial })
-
 interface PlanetProps {
   config: PlanetConfig;
   position: [number, number, number];
@@ -109,7 +107,7 @@ const Planet: React.FC<PlanetProps> = ({
       console.log('Looking for mesh:', config.meshName);
       console.log('Looking for material:', config.materialName);
     }
-  }, [materials, nodes, config.modelPath]);
+  }, [materials, nodes, config.name, config.meshName, config.materialName]);
 
   if (!isClient) {
     // Return null or a fallback component during SSR

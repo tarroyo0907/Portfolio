@@ -1,24 +1,9 @@
-// next.config.mjs
-import withPlugins from 'next-compose-plugins';
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.glb$/,
-      use: [
-        {
-          loader: 'file-loader',
-          options: {
-            publicPath: '/_next/static/files',
-            outputPath: 'static/files',
-            name: '[name].[hash].[ext]',
-          },
-        },
-      ],
-    });
-
-    return config;
+  images: {
+    unoptimized: true, // Required for static export
   },
+  trailingSlash: true, // Ensures all routes end with a trailing slash
 };
 
-export default withPlugins([], nextConfig);
+export default nextConfig;
