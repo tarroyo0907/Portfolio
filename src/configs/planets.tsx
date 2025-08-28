@@ -42,22 +42,34 @@ export const moonConfig: PlanetConfig = {
   annotations : [
     {
       position: [50, 0, 0],
-      title: "Olympus Mons",
+      title: "Web Portfolio",
       description: "Largest volcano in the solar system",
       extraInfo: "Standing 21.9 km high and 600 km in diameter, Olympus Mons is the largest known volcano in the solar system. To put this in perspective, it's about three times as tall as Mount Everest!"
     },
     {
       position: [0, 50, 0],
-      title: "North Pole",
+      title: "Warcry Duel",
       description: "Ice caps containing water and CO2",
       extraInfo: "Mars' polar ice caps consist of both water ice and dry ice (frozen CO2). During winter, up to 30% of Mars' atmosphere freezes into these caps."
     },
     {
       position: [0, 0, 50],
-      title: "Valles Marineris",
+      title: "The Trail",
       description: "Largest canyon in the solar system",
       extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
-    }
+    },
+    {
+      position: [0, 0, 50],
+      title: "Inventory Management System for Alchemetrics",
+      description: "Largest canyon in the solar system",
+      extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
+    },
+    {
+      position: [0, 0, 50],
+      title: "Webpage API",
+      description: "Largest canyon in the solar system",
+      extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
+    },
   ],
   hoverText: "Explore Projects",
 }
@@ -73,20 +85,14 @@ export const earthConfig: PlanetConfig = {
     annotations : [
       {
         position: [51, 0, 0],
-        title: "Olympus Mons",
-        description: "Largest volcano in the solar system",
+        title: "Biography",
+        description: "Learn a little bit about who I am!",
         extraInfo: "Standing 21.9 km high and 600 km in diameter, Olympus Mons is the largest known volcano in the solar system. To put this in perspective, it's about three times as tall as Mount Everest!"
       },
       {
-        position: [0, 51, 0],
-        title: "North Pole",
-        description: "Ice caps containing water and CO2",
-        extraInfo: "Mars' polar ice caps consist of both water ice and dry ice (frozen CO2). During winter, up to 30% of Mars' atmosphere freezes into these caps."
-      },
-      {
-        position: [0, 0, 51],
-        title: "Valles Marineris",
-        description: "Largest canyon in the solar system",
+        position: [-51, 0, 0],
+        title: "Contact Information",
+        description: "A list of ways to reach me!",
         extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
       }
     ],

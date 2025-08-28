@@ -6,10 +6,9 @@ import Loader from '@/components/Loader'
 import SpaceSkybox from '@/components/SpaceSkybox'
 import { marsConfig, moonConfig, earthConfig } from '../configs/planets'
 import Planet from '@/models/Planet'
-
-{/* <div className='absolute top-28 left-0 right-0 z-10 flex items-center justify-center'>
-            POPUP
-        </div> */}
+import Navbar from '../components/Navbar'
+import Footer from '@/components/Footer'
+import { Stats } from '@react-three/drei'
         
 export default function Home() {
   const [selectedPlanet, setSelectedPlanet] = useState<'mars' | 'moon' | 'earth' | null>(null);
@@ -41,6 +40,7 @@ export default function Home() {
   const handlePlanetClick = (planet: 'mars' | 'moon' | 'earth') => {
     setSelectedPlanet(planet);
     setSidebarContent(null);
+    document.querySelector("#footerText")!.innerHTML = "Click and drag a planet to explore its features!";
   };
 
   const adjustMarsForScreenSize = (): [number[], [number, number, number], [number, number, number]] => {
@@ -96,6 +96,8 @@ export default function Home() {
   const [earthScale, earthPosition, earthRotation]:  [number[], [number, number, number], [number, number, number]]= adjustEarthForScreenSize();
 
   return (
+    <>
+    <Navbar />
     <section className='w-full h-screen relative'>
       {/* Side Panel - Add conditional rendering */}
       {selectedPlanet && (
@@ -135,12 +137,14 @@ export default function Home() {
             position: [0, 0, 200]  // Move camera back along z-axis
             }}
           gl={{ 
-            antialias: true,  // Add antialiasing
-            pixelRatio: window.devicePixelRatio  // Match device pixel ratio
+            antialias: false,  // Try disabling antialiasing first
+            pixelRatio: Math.min(window.devicePixelRatio, 2),  // Cap pixel ratio
+            powerPreference: "high-performance"  // Use discrete GPU if available
           }}
           style={{ background: 'transparent'}}
         >
 
+          <Stats />
           <Suspense fallback={<Loader />}>
           <SpaceSkybox />
           {/* Lights */}
@@ -210,17 +214,19 @@ export default function Home() {
                     {
                       setSelectedPlanet(null)
                       setHoveredPlanet(null)
+                      document.querySelector("#footerText")!.innerHTML = "Click on a planet to learn more information about a specific subject!";
                     }}
                   className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg backdrop-blur-sm"
                 >
-                  Back to Overview
+                  Back to Planets
                 </button>
               </Html>
             )}
           </group>
-          
           </Suspense>
         </Canvas>
     </section>
+    <Footer />
+    </>
   )
 }

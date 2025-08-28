@@ -2,6 +2,7 @@ import { useThree } from '@react-three/fiber'
 import { CubeTextureLoader, LinearMipmapLinearFilter, LinearFilter, BackSide } from 'three'
 import { Mesh, ShaderMaterial } from 'three'
 import * as THREE from 'three'
+import { useMemo, useEffect } from 'react'
 
 const SpaceSkybox = () => {
   const { scene } = useThree()
@@ -23,10 +24,9 @@ const SpaceSkybox = () => {
   texture.generateMipmaps = true
 
   // Create a custom shader material that ignores lighting
-  const skyboxMaterial = new ShaderMaterial({
-    uniforms: {
-      envMap: { value: texture }
-    },
+  const { skyboxMaterial, skybox } = useMemo(() => {
+    const material = new ShaderMaterial({
+    uniforms: { envMap: { value: texture }},
     vertexShader: `
       varying vec3 vWorldDirection;
       void main() {
@@ -47,14 +47,23 @@ const SpaceSkybox = () => {
   })
 
   // Create a large cube with the skybox material
-  const skybox = new Mesh(
+  const skyboxMesh = new Mesh(
     new THREE.BoxGeometry(1000, 1000, 1000),
-    skyboxMaterial
+    material
   )
   
-  scene.add(skybox)
+  return { skyboxMaterial: material, skybox: skyboxMesh } }, [])
 
-  //scene.background = texture
+  useEffect(() => {
+    // Add the skybox to the scene
+    scene.add(skybox)
+    return () => {
+      scene.remove(skybox)
+      skyboxMaterial.dispose()
+      skybox.geometry.dispose()
+    }
+  }, [scene, skybox, skyboxMaterial])
+
   return null
 }
 
