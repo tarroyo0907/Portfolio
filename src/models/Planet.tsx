@@ -59,6 +59,7 @@ export interface PlanetConfig {
   outlineSide?: 'front' | 'back';
   color?: string;
   hoverText?: string;
+  hoverPosition?: [number, number, number];
 }
 
 interface PlanetProps {
@@ -75,6 +76,7 @@ interface PlanetProps {
   isHovered?: boolean;
   onHoverStart?: () => void;
   onHoverEnd?: () => void;
+  autoRotate?: boolean;
 }
 const Planet: React.FC<PlanetProps> = ({ 
   config, 
@@ -84,6 +86,7 @@ const Planet: React.FC<PlanetProps> = ({
   isHovered,
   onHoverStart,
   onHoverEnd,
+  autoRotate,
   ...props 
 }) => {
   const [isClient, setIsClient] = useState(false);
@@ -97,6 +100,13 @@ const Planet: React.FC<PlanetProps> = ({
     description: string;
     extraInfo?: string;
   }>(null);
+
+  useFrame(() => {
+    if (autoRotate && planetRef.current) {
+      planetRef.current.rotation.y += 0.001;
+      planetRef.current.rotation.x -= 0.001;
+    }
+  })
 
   useEffect(() => {
     setIsClient(true);
@@ -136,19 +146,17 @@ const Planet: React.FC<PlanetProps> = ({
 
   return (
     <>
-    {isHovered && (
-        <Html
-        position={[0, -100, 0]}
-        className="pointer-events-none"
-        center
-        distanceFactor={8}
-        sprite
-      >
-        <div className="bg-black bg-opacity-50 rounded-lg px-4 py-2 text-white text-1024 whitespace-nowrap">
-          {config.hoverText || config.name}
-        </div>
-      </Html> 
-    )}
+      <Html
+      position={config.hoverPosition || [0, 0, 0]}
+      className="pointer-events-none"
+      center
+      distanceFactor={8}
+      sprite
+    >
+      <div className="bg-black bg-opacity-50 rounded-lg px-4 py-2 text-white text-1024 whitespace-nowrap">
+        {config.hoverText || config.name}
+      </div>
+    </Html> 
     {enableControls ? (
       <PresentationControls
       global

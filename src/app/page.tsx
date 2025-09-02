@@ -154,7 +154,7 @@ export default function Home() {
 
           {/* Camera Controls */}
           <CameraControls
-            enabled={!selectedPlanet}
+            enabled={false}
             minDistance={50}
             maxDistance={150}
           />
@@ -173,6 +173,7 @@ export default function Home() {
                 isHovered={hoveredPlanet === 'mars'}
                 onHoverStart={() => setHoveredPlanet('mars')}
                 onHoverEnd={() => setHoveredPlanet(null)}
+                autoRotate={!selectedPlanet}
               />
             )}
             
@@ -188,6 +189,7 @@ export default function Home() {
                 isHovered={hoveredPlanet === 'moon'}
                 onHoverStart={() => setHoveredPlanet('moon')}
                 onHoverEnd={() => setHoveredPlanet(null)}
+                autoRotate={!selectedPlanet}
               />
             )}
             
@@ -203,6 +205,7 @@ export default function Home() {
                 isHovered={hoveredPlanet === 'earth'}
                 onHoverStart={() => setHoveredPlanet('earth')}
                 onHoverEnd={() => setHoveredPlanet(null)}
+                autoRotate={!selectedPlanet}
               />
             )}
 

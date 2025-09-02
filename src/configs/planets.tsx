@@ -29,6 +29,7 @@ export const marsConfig: PlanetConfig = {
     }
   ],
   hoverText: "Explore Skills",
+  hoverPosition: [160, -75, 0]
 }
 
 export const moonConfig: PlanetConfig = {
@@ -72,6 +73,7 @@ export const moonConfig: PlanetConfig = {
     },
   ],
   hoverText: "Explore Projects",
+  hoverPosition: [0, -75, 0]
 }
 
 export const earthConfig: PlanetConfig = {
@@ -97,4 +99,5 @@ export const earthConfig: PlanetConfig = {
       }
     ],
     hoverText: "Explore About Me",
+    hoverPosition: [-160, -75, 0]
   }
