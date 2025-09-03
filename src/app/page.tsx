@@ -14,6 +14,7 @@ export default function Home() {
     title: string;
     description: string;
     extraInfo?: string;
+    customContent?: React.ReactNode;
   } | null>(null);
   const [leftSidebarVisible, setLeftSidebarVisible] = useState(false);
   const [rightSidebarVisible, setRightSidebarVisible] = useState(false);
@@ -127,7 +128,7 @@ export default function Home() {
           {sidebarContent ? (
     <>
       {/* Render custom content if available, otherwise fallback to description */}
-      {sidebarContent.customContent ? (
+      {sidebarContent.customContent? (
         <div className="mb-6">
           {sidebarContent.customContent}
         </div>
