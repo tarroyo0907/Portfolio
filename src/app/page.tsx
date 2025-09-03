@@ -1,14 +1,10 @@
 'use client'
 import React, { Suspense, useRef, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, CameraControls, Html } from '@react-three/drei'
-import Loader from '@/components/Loader'
-import SpaceSkybox from '@/components/SpaceSkybox'
+import { OrbitControls, CameraControls, Html, Stats } from '@react-three/drei'
 import { marsConfig, moonConfig, earthConfig } from '../configs/planets'
 import Planet from '@/models/Planet'
-import Navbar from '../components/Navbar'
-import Footer from '@/components/Footer'
-import { Stats } from '@react-three/drei'
+import { Loader, SpaceSkybox, Navbar, Footer, Sidebar } from '@/components'
         
 export default function Home() {
   const [selectedPlanet, setSelectedPlanet] = useState<'mars' | 'moon' | 'earth' | null>(null);
@@ -19,6 +15,9 @@ export default function Home() {
     description: string;
     extraInfo?: string;
   } | null>(null);
+  const [leftSidebarVisible, setLeftSidebarVisible] = useState(false);
+  const [rightSidebarVisible, setRightSidebarVisible] = useState(false);
+  const [focusedAnnotationIndex, setFocusedAnnotationIndex] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     // This code will only run on the client
@@ -27,6 +26,26 @@ export default function Home() {
 
   if (!isClient) {
     return null; // Prevent rendering on the server
+  }
+
+  const handleAnnotationNavigate = (annotationIndex: number) => {
+    setFocusedAnnotationIndex(annotationIndex);
+    // Also set the sidebar content to show the annotation details
+    const currentConfig = selectedPlanet === 'mars' ? marsConfig : 
+                         selectedPlanet === 'moon' ? moonConfig : earthConfig;
+    const annotation = currentConfig.annotations[annotationIndex];
+    if (annotation) {
+      setSidebarContent(annotation);
+    }
+  };
+
+  const getCurrentPlanetConfig = () => {
+    switch(selectedPlanet) {
+      case 'mars': return marsConfig;
+      case 'moon': return moonConfig;
+      case 'earth': return earthConfig;
+      default: return null;
+    }
   }
 
   // Camera animation values
@@ -99,42 +118,96 @@ export default function Home() {
     <>
     <Navbar />
     <section className='w-full h-screen relative'>
-      {/* Side Panel - Add conditional rendering */}
-      {selectedPlanet && (
-        <div className="fixed right-0 top-0 h-full w-96 bg-black/75 text-white p-8 transform transition-all duration-300 ease-in-out z-10">
-          <div className="mt-8">
-            {sidebarContent ? (
-              <>
-                <h2 className="text-2xl font-bold mb-4">{sidebarContent.title}</h2>
-                <p className="mb-6">{sidebarContent.description}</p>
-                <div className="border-t border-white/20 pt-6">
-                  <p className="text-sm leading-relaxed text-white/80">
-                    {sidebarContent.extraInfo}
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                <h2 className="text-2xl font-bold mb-4">
-                  {selectedPlanet === 'mars' ? 'Mars Information' : 'Moon Information'}
-                </h2>
-                <div className="border-t border-white/20 pt-6">
-                  <p className="text-sm leading-relaxed text-white/80">
-                    Click on any annotation point to learn more about {selectedPlanet === 'mars' ? 'Mars' : 'Moon'} features.
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
+      {/* Right Sidebar - Planet Information */}
+        <Sidebar
+          isVisible={!!selectedPlanet}
+          side="right"
+          title={selectedPlanet === 'mars' ? 'Mars Information' : selectedPlanet === 'moon' ? 'Moon Information' : 'Earth Information'}
+        >
+          {sidebarContent ? (
+    <>
+      {/* Render custom content if available, otherwise fallback to description */}
+      {sidebarContent.customContent ? (
+        <div className="mb-6">
+          {sidebarContent.customContent}
         </div>
+      ) : (
+        <>
+          <p className="mb-6">{sidebarContent.description}</p>
+          <p className="text-sm leading-relaxed text-white/80">
+            {sidebarContent.extraInfo}
+          </p>
+        </>
       )}
+    </>
+          ) : (
+            <p className="text-sm leading-relaxed text-white/80">
+              Click on any annotation point to learn more about {selectedPlanet} features.
+            </p>
+          )}
+        </Sidebar>
+
+        {/* Left Sidebar - Controls/Navigation */}
+        <Sidebar
+          isVisible={!!selectedPlanet}
+          side="left"
+          title="Navigation"
+        >
+          <div className="space-y-4">
+            <button 
+              className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+              onClick={() => setSelectedPlanet('mars')}
+            >
+              View Mars
+            </button>
+            <button 
+              className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+              onClick={() => setSelectedPlanet('moon')}
+            >
+              View Moon
+            </button>
+            <button 
+              className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+              onClick={() => setSelectedPlanet('earth')}
+            >
+              View Earth
+            </button>
+            <button 
+              className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+              onClick={() => setSelectedPlanet(null)}
+            >
+              Reset View
+            </button>
+          </div>
+
+        {/* Annotation Navigation Buttons */}
+        {selectedPlanet && (
+          <div className="space-y-4 mt-6">
+            <h4 className="text-white font-semibold mb-3">Explore Features:</h4>
+            {getCurrentPlanetConfig()?.annotations.map((annotation, index) => (
+              <button
+                key={index}
+                className={`w-full px-4 py-2 rounded-lg transition-colors text-left ${
+                  focusedAnnotationIndex === index 
+                    ? 'bg-green-600 hover:bg-green-700' 
+                    : 'bg-gray-600 hover:bg-gray-700'
+                }`}
+                onClick={() => handleAnnotationNavigate(index)}
+              >
+                <div className="text-white font-medium">{annotation.title}</div>
+                <div className="text-white/70 text-sm">{annotation.description}</div>
+              </button>
+            ))}
+          </div>
+        )}
+        </Sidebar>
         <Canvas 
           className="w-full h-screen bg-transparent"
           camera={{
             near: 0.1,
             far: 2000,
             fov: 75,
-            position: [0, 0, 200]  // Move camera back along z-axis
+            position: [0, 0, 200]
             }}
           gl={{ 
             antialias: false,  // Try disabling antialiasing first
@@ -146,86 +219,89 @@ export default function Home() {
 
           <Stats />
           <Suspense fallback={<Loader />}>
-          <SpaceSkybox />
-          {/* Lights */}
-          <directionalLight position={[1, 1, 1]} intensity={3}/>
-          <ambientLight intensity={0.5}/>
-          <hemisphereLight groundColor="#000000" intensity={0.5} />
+            <SpaceSkybox />
+            {/* Lights */}
+            <directionalLight position={[1, 1, 1]} intensity={3}/>
+            <ambientLight intensity={0.5}/>
+            <hemisphereLight groundColor="#000000" intensity={0.5} />
 
-          {/* Camera Controls */}
-          <CameraControls
-            enabled={false}
-            minDistance={50}
-            maxDistance={150}
-          />
+            {/* Camera Controls */}
+            <CameraControls
+              enabled={false}
+              minDistance={50}
+              maxDistance={150}
+            />
 
-          {/* Planets */}
-          <group>
-            {/* Only render Mars if it's selected or no planet is selected */}
-            {(!selectedPlanet || selectedPlanet === 'mars') && (
-              <Planet
-                config={marsConfig}
-                position={marsPosition}
-                rotation={marsRotation}
-                onClick={() => handlePlanetClick('mars')}
-                onAnnotationClick={selectedPlanet === 'mars' ? setSidebarContent : undefined}
-                enableControls={selectedPlanet === 'mars'}
-                isHovered={hoveredPlanet === 'mars'}
-                onHoverStart={() => setHoveredPlanet('mars')}
-                onHoverEnd={() => setHoveredPlanet(null)}
-                autoRotate={!selectedPlanet}
-              />
-            )}
-            
-            {/* Only render Moon if it's selected or no planet is selected */}
-            {(!selectedPlanet || selectedPlanet === 'moon') && (
-              <Planet
-                config={moonConfig}
-                position={moonPosition}
-                rotation={moonRotation}
-                onClick={() => handlePlanetClick('moon')}
-                onAnnotationClick={selectedPlanet === 'moon' ? setSidebarContent : undefined}
-                enableControls={selectedPlanet === 'moon'}
-                isHovered={hoveredPlanet === 'moon'}
-                onHoverStart={() => setHoveredPlanet('moon')}
-                onHoverEnd={() => setHoveredPlanet(null)}
-                autoRotate={!selectedPlanet}
-              />
-            )}
-            
-            {/* Only render Earth if it's selected or no planet is selected */}
-            {(!selectedPlanet || selectedPlanet === 'earth') && (
-              <Planet
-                config={earthConfig}
-                position={earthPosition}
-                rotation={earthRotation}
-                onClick={() => handlePlanetClick('earth')}
-                onAnnotationClick={selectedPlanet === 'earth' ? setSidebarContent : undefined}
-                enableControls={selectedPlanet === 'earth'}
-                isHovered={hoveredPlanet === 'earth'}
-                onHoverStart={() => setHoveredPlanet('earth')}
-                onHoverEnd={() => setHoveredPlanet(null)}
-                autoRotate={!selectedPlanet}
-              />
-            )}
+            {/* Planets */}
+            <group>
+              {/* Only render Mars if it's selected or no planet is selected */}
+              {(!selectedPlanet || selectedPlanet === 'mars') && (
+                <Planet
+                  config={marsConfig}
+                  position={marsPosition}
+                  rotation={marsRotation}
+                  onClick={() => handlePlanetClick('mars')}
+                  onAnnotationClick={selectedPlanet === 'mars' ? setSidebarContent : undefined}
+                  enableControls={selectedPlanet === 'mars'}
+                  isHovered={hoveredPlanet === 'mars'}
+                  onHoverStart={() => setHoveredPlanet('mars')}
+                  onHoverEnd={() => setHoveredPlanet(null)}
+                  autoRotate={!selectedPlanet}
+                  focusedAnnotationIndex={selectedPlanet === 'mars' ? focusedAnnotationIndex : undefined}
+                />
+              )}
+              
+              {/* Only render Moon if it's selected or no planet is selected */}
+              {(!selectedPlanet || selectedPlanet === 'moon') && (
+                <Planet
+                  config={moonConfig}
+                  position={moonPosition}
+                  rotation={moonRotation}
+                  onClick={() => handlePlanetClick('moon')}
+                  onAnnotationClick={selectedPlanet === 'moon' ? setSidebarContent : undefined}
+                  enableControls={selectedPlanet === 'moon'}
+                  isHovered={hoveredPlanet === 'moon'}
+                  onHoverStart={() => setHoveredPlanet('moon')}
+                  onHoverEnd={() => setHoveredPlanet(null)}
+                  autoRotate={!selectedPlanet}
+                  focusedAnnotationIndex={selectedPlanet === 'moon' ? focusedAnnotationIndex : undefined}
+                />
+              )}
+              
+              {/* Only render Earth if it's selected or no planet is selected */}
+              {(!selectedPlanet || selectedPlanet === 'earth') && (
+                <Planet
+                  config={earthConfig}
+                  position={earthPosition}
+                  rotation={earthRotation}
+                  onClick={() => handlePlanetClick('earth')}
+                  onAnnotationClick={selectedPlanet === 'earth' ? setSidebarContent : undefined}
+                  enableControls={selectedPlanet === 'earth'}
+                  isHovered={hoveredPlanet === 'earth'}
+                  onHoverStart={() => setHoveredPlanet('earth')}
+                  onHoverEnd={() => setHoveredPlanet(null)}
+                  autoRotate={!selectedPlanet}
+                  focusedAnnotationIndex={selectedPlanet === 'earth' ? focusedAnnotationIndex : undefined}
+                />
+              )}
 
-            {/* Back Button */}
-            {selectedPlanet && (
-              <Html center position={[0, 80, 0]}>
-                <button
-                  onClick={() => 
-                    {
-                      setSelectedPlanet(null)
-                      setHoveredPlanet(null)
-                      document.querySelector("#footerText")!.innerHTML = "Click on a planet to learn more information about a specific subject!";
-                    }}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg backdrop-blur-sm"
-                >
-                  Back to Planets
-                </button>
-              </Html>
-            )}
-          </group>
+              {/* Back Button */}
+              {selectedPlanet && (
+                <Html center position={[0, 80, 0]}>
+                  <button
+                    onClick={() => 
+                      {
+                        setSelectedPlanet(null)
+                        setHoveredPlanet(null)
+                        document.querySelector("#footerText")!.innerHTML = "Click on a planet to learn more information about a specific subject!";
+                      }}
+                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg backdrop-blur-sm"
+                  >
+                    Back to Planets
+                  </button>
+                </Html>
+              )}
+            </group>
           </Suspense>
         </Canvas>
     </section>

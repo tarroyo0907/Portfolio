@@ -89,7 +89,14 @@ export const earthConfig: PlanetConfig = {
         position: [51, 0, 0],
         title: "Biography",
         description: "Learn a little bit about who I am!",
-        extraInfo: "Standing 21.9 km high and 600 km in diameter, Olympus Mons is the largest known volcano in the solar system. To put this in perspective, it's about three times as tall as Mount Everest!"
+        customContent: (
+          <div className="space-y-4"> 
+          <p className="text-white/90">
+          This is a test for CustomContent!
+          </p>
+          <img src="/assets/selfie.jpg" alt="Profile Picture" className="w-32 h-32 rounded-full mx-auto object-cover"/>
+          </div>
+        ),
       },
       {
         position: [-51, 0, 0],

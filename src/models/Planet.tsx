@@ -13,6 +13,7 @@ import { a } from '@react-spring/three'
 import { Group, BackSide, ShaderMaterial, Mesh, Object3D, Material, MeshStandardMaterial, MeshPhysicalMaterial, FrontSide, DoubleSide } from 'three';
 import { GLTF } from 'three-stdlib';
 import { extend} from '@react-three/fiber';
+import * as THREE from 'three';
 
 // Custom outline shader material
 const createOutlineMaterial = (side: 'front' | 'back') => new ShaderMaterial({
@@ -46,6 +47,7 @@ export interface PlanetAnnotation {
   title: string;
   description: string;
   extraInfo?: string;
+  customContent?: React.ReactNode;
 }
 
 export interface PlanetConfig {
@@ -77,6 +79,7 @@ interface PlanetProps {
   onHoverStart?: () => void;
   onHoverEnd?: () => void;
   autoRotate?: boolean;
+  focusedAnnotationIndex?: number;
 }
 const Planet: React.FC<PlanetProps> = ({ 
   config, 
@@ -87,6 +90,7 @@ const Planet: React.FC<PlanetProps> = ({
   onHoverStart,
   onHoverEnd,
   autoRotate,
+  focusedAnnotationIndex,
   ...props 
 }) => {
   const [isClient, setIsClient] = useState(false);
@@ -105,6 +109,35 @@ const Planet: React.FC<PlanetProps> = ({
     if (autoRotate && planetRef.current) {
       planetRef.current.rotation.y += 0.001;
       planetRef.current.rotation.x -= 0.001;
+    }
+
+    // Handle annotation focusing
+    if (focusedAnnotationIndex !== undefined && planetRef.current && enableControls) {
+      const annotation = config.annotations[focusedAnnotationIndex];
+      // Create vectors for calculation
+      const annotationPos = new THREE.Vector3(...annotation.position);
+      const cameraDirection = new THREE.Vector3(0, 0, 1); // Camera looks toward positive Z
+      
+      // We want to rotate the planet so that the annotation faces the camera
+      // This means the annotation should be in the direction opposite to camera
+      const targetDirection = annotationPos.clone().normalize().multiplyScalar(-1);
+      
+      // Calculate required rotations
+      const targetY = Math.atan2(targetDirection.x, targetDirection.z);
+      const targetX = Math.asin(-targetDirection.y); // Negative because we want to bring it forward
+      
+      const lerpFactor = 0.05;
+      
+      // Apply Y rotation with wrapping
+      let deltaY = targetY - planetRef.current.rotation.y;
+      while (deltaY > Math.PI) deltaY -= 2 * Math.PI;
+      while (deltaY < -Math.PI) deltaY += 2 * Math.PI;
+      
+      planetRef.current.rotation.y += deltaY * lerpFactor;
+      planetRef.current.rotation.x += (targetX - planetRef.current.rotation.x) * lerpFactor;
+      
+      // Clamp X rotation
+      planetRef.current.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, planetRef.current.rotation.x));
     }
   })
 
@@ -144,10 +177,14 @@ const Planet: React.FC<PlanetProps> = ({
     return null;
   }
 
-  return (
-    <>
-      <Html
-      position={config.hoverPosition || [0, 0, 0]}
+  // Extract shared components to eliminate duplication
+  const PlanetLabel = () => {
+    let labelPosition: [number, number, number] = config.hoverPosition || [0, 0, 0];
+    if (enableControls) { labelPosition = [0, -70, 0]; }
+
+    return (
+    <Html
+      position={labelPosition || [0, 0, 0]}
       className="pointer-events-none"
       center
       distanceFactor={8}
@@ -156,41 +193,44 @@ const Planet: React.FC<PlanetProps> = ({
       <div className="bg-black bg-opacity-50 rounded-lg px-4 py-2 text-white text-1024 whitespace-nowrap">
         {config.hoverText || config.name}
       </div>
-    </Html> 
-    {enableControls ? (
-      <PresentationControls
-      global
-      config={{ mass: 2, tension: 400 }}
-      >
-    <a.group ref={planetRef}>
+    </Html>
+    );
+};
 
-    {/* Annotation points */}
-    {config.annotations.map((annotation, index) => (
-          <Html
-            key={index}
-            position={annotation.position}
-            distanceFactor={200}
-            occlude
-            style={{
-              transition: 'all 0.2s',
-              opacity: isHovered ? 1 : 0.8,
-              transform: `scale(${isHovered ? 1.2 : 1})`
-            }}
+  const AnnotationPoints = () => (
+    <>
+      {config.annotations.map((annotation, index) => (
+        <Html
+          key={index}
+          position={annotation.position}
+          distanceFactor={200}
+          occlude
+          style={{
+            transition: 'all 0.2s',
+            opacity: isHovered ? 1 : 0.8,
+            transform: `scale(${isHovered ? 1.2 : 1.0})`
+          }}
+        >
+          <div 
+            className="annotation-point"
+            onClick={() => handleAnnotationClick(annotation)}
           >
-            <div className="annotation-point"
-            onClick={() => handleAnnotationClick(annotation)}>
-              <div className="annotation-dot" />
-              <div className="annotation-label">
-                <strong>{annotation.title}</strong>
-                <br />
-                {annotation.description}
-              </div>
+            <div className="annotation-dot" />
+            <div className="annotation-label">
+              <strong>{annotation.title}</strong>
+              <br />
+              {annotation.description}
             </div>
-          </Html>
-        ))}
+          </div>
+        </Html>
+      ))}
+    </>
+  );
+
+  const PlanetMesh = () => (
     <group rotation={[-Math.PI / 2, 0, 0]}>
       <group rotation={[-Math.PI, 0, 0]} scale={0.01}>
-        {/* Original Mars mesh */}
+        {/* Original planet mesh */}
         <mesh
           geometry={planetMesh?.geometry}
           material={planetMaterial}
@@ -204,7 +244,7 @@ const Planet: React.FC<PlanetProps> = ({
             geometry={planetMesh?.geometry}
             position={[0, 0, 100]}
             rotation={[0, 0, -Math.PI / 2]}
-            scale={config.outlineScale} // Slightly larger scale for outline
+            scale={config.outlineScale}
           >
             <shaderMaterial
               attach="material"
@@ -216,72 +256,39 @@ const Planet: React.FC<PlanetProps> = ({
         )}
       </group>
     </group>
-      </a.group>
-      </PresentationControls>
-    ) : (
-    <a.group 
-    ref={planetRef}
-    {...props}
-    onClick={onClick}
-    onPointerOver={onHoverStart}
-    onPointerOut={onHoverEnd}
-    >
-    
-    {/* Annotation points */}
-    {config.annotations.map((annotation, index) => (
-          <Html
-            key={index}
-            position={annotation.position}
-            distanceFactor={200}
-            occlude
-            style={{
-              transition: 'all 0.2s',
-              opacity: isHovered ? 1 : 0.8,
-              transform: `scale(${isHovered ? 1.2 : 1})`
-            }}
-          >
-            <div className="annotation-point"
-            onClick={() => handleAnnotationClick(annotation)}>
-              <div className="annotation-dot" />
-              <div className="annotation-label">
-                <strong>{annotation.title}</strong>
-                <br />
-                {annotation.description}
-              </div>
-            </div>
-          </Html>
-        ))}
-    <group rotation={[-Math.PI / 2, 0, 0]}>
-      <group rotation={[-Math.PI, 0, 0]} scale={0.01}>
-        {/* Original Mars mesh */}
-        <mesh
-          geometry={planetMesh?.geometry}
-          material={planetMaterial}
-          position={[0, 0, 100]}
-          rotation={[0, 0, -Math.PI / 2]}
-          scale={config.scale}
-        />
-        {/* Outline mesh that only shows when hovered */}
-        {isHovered && (
-          <mesh
-            geometry={planetMesh?.geometry}
-            position={[0, 0, 100]}
-            rotation={[0, 0, -Math.PI / 2]}
-            scale={config.outlineScale} // Slightly larger scale for outline
-          >
-            <shaderMaterial
-              attach="material"
-              {...createOutlineMaterial(config.outlineSide || 'back')}
-              transparent
-              depthWrite={false}
-            />
-          </mesh>
-        )}
-      </group>
-    </group>
-    </a.group>
-    )}
-  </>
+  );
+
+  const PlanetContent = () => (
+    <>
+      <AnnotationPoints />
+      <PlanetMesh />
+    </>
+  );
+
+  return (
+    <>
+      <PlanetLabel />
+      {enableControls ? (
+        <PresentationControls
+          global
+          config={{ mass: 2, tension: 400 }}
+        >
+          <a.group ref={planetRef}>
+            <PlanetContent />
+          </a.group>
+        </PresentationControls>
+      ) : (
+        <a.group 
+          ref={planetRef}
+          {...props}
+          onClick={onClick}
+          onPointerOver={onHoverStart}
+          onPointerOut={onHoverEnd}
+        >
+          <PlanetContent />
+        </a.group>
+      )}
+    </>
   );
 }
 
