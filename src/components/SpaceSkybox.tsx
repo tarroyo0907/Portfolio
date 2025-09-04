@@ -1,14 +1,14 @@
-import { useThree } from '@react-three/fiber'
+import { useThree, useFrame } from '@react-three/fiber'
 import { CubeTextureLoader, LinearMipmapLinearFilter, LinearFilter, BackSide } from 'three'
 import { Mesh, ShaderMaterial } from 'three'
 import * as THREE from 'three'
-import { useMemo, useEffect } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 
 const SpaceSkybox = () => {
   const { scene } = useThree()
+  const skyboxRef = useRef<THREE.Object3D | null>(null)
 
   const loader = new CubeTextureLoader()
-  // Make sure these paths point to your skybox images in the public folder
   const texture = loader.load([
     '/assets/skybox/galaxy+X.png', // front
     '/assets/skybox/galaxy+Y.png', // back
@@ -54,8 +54,16 @@ const SpaceSkybox = () => {
   
   return { skyboxMaterial: material, skybox: skyboxMesh } }, [])
 
+  useFrame((state, delta) => {
+    if (skyboxRef.current) {
+      skyboxRef.current.rotation.y += delta * 0.05;
+      skyboxRef.current.rotation.x += delta * 0.01;
+    }
+  })
+
   useEffect(() => {
     // Add the skybox to the scene
+    skyboxRef.current = skybox as Mesh
     scene.add(skybox)
     return () => {
       scene.remove(skybox)

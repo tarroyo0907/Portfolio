@@ -98,7 +98,7 @@ const Planet: React.FC<PlanetProps> = ({
   const { nodes, materials } = useGLTF(config.modelPath);
   // const [hovered, setHovered] = useState(false);
   const [rotation, setRotation] = useState([0, 0, 0])
-  const [isDragging, setIsDragging] = useState(false)
+  const [rotatedManually, setRotatedManually] = useState(false)
   const [selectedAnnotation, setSelectedAnnotation] = useState<null | {
     title: string;
     description: string;
@@ -114,6 +114,14 @@ const Planet: React.FC<PlanetProps> = ({
     // Handle annotation focusing
     if (focusedAnnotationIndex !== undefined && planetRef.current && enableControls) {
       const annotation = config.annotations[focusedAnnotationIndex];
+      if (rotatedManually) {
+        planetRef.current.rotation.x = 0;
+        planetRef.current.rotation.y = 0;
+        planetRef.current.rotation.z = 0;
+        setRotatedManually(false);
+        console.log('Planet instantly reset to (0,0,0)');
+      }
+
       // Create vectors for calculation
       const annotationPos = new THREE.Vector3(...annotation.position);
       const cameraDirection = new THREE.Vector3(0, 0, 1); // Camera looks toward positive Z
@@ -269,14 +277,12 @@ const Planet: React.FC<PlanetProps> = ({
     <>
       <PlanetLabel />
       {enableControls ? (
-        <PresentationControls
-          global
-          config={{ mass: 2, tension: 400 }}
-        >
-          <a.group ref={planetRef}>
+          <a.group 
+          ref={planetRef}
+          onPointerUp={() => console.log("Pointer Up!")}
+          >
             <PlanetContent />
           </a.group>
-        </PresentationControls>
       ) : (
         <a.group 
           ref={planetRef}

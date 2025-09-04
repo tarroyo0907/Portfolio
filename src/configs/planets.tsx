@@ -44,14 +44,41 @@ export const moonConfig: PlanetConfig = {
     {
       position: [50, 0, 0],
       title: "Web Portfolio",
-      description: "Largest volcano in the solar system",
-      extraInfo: "Standing 21.9 km high and 600 km in diameter, Olympus Mons is the largest known volcano in the solar system. To put this in perspective, it's about three times as tall as Mount Everest!"
+      description: "The very site you're on right now!",
+      customContent:(
+        <div> 
+          <p>
+            This portfolio was made to showcase the projects that I've made and my development skills. In order to highlight my game development background, I wanted to make a site that incorporated 3D aspects with more interaction for the user.
+          </p>
+          <br className="padding-10"></br>
+          <p>
+            The 3D planets were made using React Three Fiber, a powerful library that allows for easy integration of Three.js with React. The rest of the site was built using Next.js and Tailwind CSS to ensure a fast and responsive experience.
+          </p>
+          <br />
+          <p> 
+            Skills Used: React, Next.js, Tailwind CSS, Three.js, React Three Fiber, Github, Vercel, and more! 
+          </p>
+          <br />
+          <p>
+            Github: <a href="https://github.com/tarroyo0907/Portfolio" target="_blank" rel="github">https://github.com/tarroyo0907/Portfolio</a>
+          </p>
+        </div>
+      )
     },
     {
       position: [0, 50, 0],
       title: "Warcry Duel",
-      description: "Ice caps containing water and CO2",
-      extraInfo: "Mars' polar ice caps consist of both water ice and dry ice (frozen CO2). During winter, up to 30% of Mars' atmosphere freezes into these caps."
+      description: "My personal multiplayer Unity game project!",
+      customContent: (
+        <div>
+          <p> Warcry Duel is an online multiplayer game that I developed by myself using Unity. Players fight in one-on-one matches on a board where their goal is to get one of their units to the other side of the board. Along the way, players will engage in combat between their units and utilize their unique abilities to outsmart the enemy opponent in this thrilling strategy game!</p>
+          <br/>
+          <p><strong>Skills Used:</strong> Unity, C#, Github, Networking for Game Objects, Blender</p>
+          <br/>
+          <p><strong>Github:</strong> <a href="https://github.com/tarroyo0907/WarcryDuel" target="_blank" rel="github">https://github.com/tarroyo0907/WarcryDuel</a></p>
+          <img src="/assets/warcry_duel.png" alt="Warcry Duel Screenshot" className="w-full h-auto mt-4" />
+        </div>
+      )
     },
     {
       position: [0, 0, 50],
@@ -92,7 +119,19 @@ export const earthConfig: PlanetConfig = {
         customContent: (
           <div className="space-y-4"> 
           <p className="text-white/90">
-          This is a test for CustomContent!
+           Hello! I'm Tyler Arroyo, a passionate software and game developer. I strive to learn as much as I can in any field that I'm in. I enjoy working with others to create amazing things, and I love a good challenge. Outside of coding, I'm usually rock climbing, working out, or playing video games! Welcome to my portfolio!
+
+           <br/>
+           <hr/>
+           <br/>
+
+           Education : Rochester Institute of Technology
+
+            <br/>
+           <hr/>
+           <br/>
+
+            <strong>Golisano College of Computing Information</strong> B.S. in Game Design and Development
           </p>
           <img src="/assets/selfie.jpg" alt="Profile Picture" className="w-32 h-32 rounded-full mx-auto object-cover"/>
           </div>
@@ -102,8 +141,13 @@ export const earthConfig: PlanetConfig = {
         position: [-51, 0, 0],
         title: "Contact Information",
         description: "A list of ways to reach me!",
-        extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
-      }
+        customContent: (
+          <p>
+            Email : tarroyo0907@gmail.com <br/>
+            LinkedIn : <a href="https://www.linkedin.com/in/tyler-arroyo-03206b256/" target="_blank" className="text-blue-400 underline">linkedin.com/in/tyler-arroyo/</a>
+          </p>
+        ),
+      },
     ],
     hoverText: "Explore About Me",
     hoverPosition: [-160, -75, 0]

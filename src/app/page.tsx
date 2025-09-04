@@ -123,7 +123,7 @@ export default function Home() {
         <Sidebar
           isVisible={!!selectedPlanet}
           side="right"
-          title={selectedPlanet === 'mars' ? 'Mars Information' : selectedPlanet === 'moon' ? 'Moon Information' : 'Earth Information'}
+          title={selectedPlanet === 'mars' ? 'Skills' : selectedPlanet === 'moon' ? 'Projects' : 'About Me'}
         >
           {sidebarContent ? (
     <>
@@ -143,7 +143,7 @@ export default function Home() {
     </>
           ) : (
             <p className="text-sm leading-relaxed text-white/80">
-              Click on any annotation point to learn more about {selectedPlanet} features.
+              Click on any feature to learn more!
             </p>
           )}
         </Sidebar>
@@ -159,25 +159,19 @@ export default function Home() {
               className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
               onClick={() => setSelectedPlanet('mars')}
             >
-              View Mars
+              View Skills
             </button>
             <button 
               className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
               onClick={() => setSelectedPlanet('moon')}
             >
-              View Moon
+              View Projects
             </button>
             <button 
               className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
               onClick={() => setSelectedPlanet('earth')}
             >
-              View Earth
-            </button>
-            <button 
-              className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
-              onClick={() => setSelectedPlanet(null)}
-            >
-              Reset View
+              View About Me
             </button>
           </div>
 
@@ -218,7 +212,6 @@ export default function Home() {
           style={{ background: 'transparent'}}
         >
 
-          <Stats />
           <Suspense fallback={<Loader />}>
             <SpaceSkybox />
             {/* Lights */}
