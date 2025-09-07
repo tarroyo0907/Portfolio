@@ -1,7 +1,7 @@
 import { PlanetConfig } from '../models/Planet'
 
 export const marsConfig: PlanetConfig = {
-  name: 'Skills',
+  name: 'Experience',
   modelPath: '/assets/mars_planet.glb',
   meshName: 'LowpolyMars_lowpolymarsmat_0',
   materialName: 'lowpolymarsmat',
@@ -11,24 +11,46 @@ export const marsConfig: PlanetConfig = {
   annotations : [
     {
       position: [50, 0, 0],
-      title: "Olympus Mons",
-      description: "Largest volcano in the solar system",
-      extraInfo: "Standing 21.9 km high and 600 km in diameter, Olympus Mons is the largest known volcano in the solar system. To put this in perspective, it's about three times as tall as Mount Everest!"
+      title: "Jobs / Prior Work Experience",
+      description: "A list of the places that I've worked at and my role there.",
+      customContent:(
+        <div>
+          <p><strong>Production Metals                            June 2023</strong><br />        
+            <strong>Inventory Facilitator | Full-Time</strong> <br />
+            Used a SQL database to properly manage thousands of pounds of metal and process it through their warehouses.
+            Worked and communicated with both upper warehouse management and the team of manufacturers to keep the metal organized and accounted for.
+          </p>
+        </div>
+      )
     },
     {
       position: [0, 50, 0],
-      title: "North Pole",
-      description: "Ice caps containing water and CO2",
-      extraInfo: "Mars' polar ice caps consist of both water ice and dry ice (frozen CO2). During winter, up to 30% of Mars' atmosphere freezes into these caps."
+      title: "Clubs / Extracurricular Activities",
+      description: "A list of clubs and extracurricular activities that I've participated in.",
+      customContent:(
+        <div>
+          <p>RIT VALORANT Esports <strong>Fall 2023</strong></p>
+          <br />
+          <p><a href="https://www.rit.edu/esports/valorant" target="_blank" rel="noopener noreferrer">https://www.rit.edu/esports/valorant</a></p>
+          <br />
+          <img src="/assets/RIT_Valorant.png" alt="RIT Valorant Esports" className="w-full h-auto mt-4" />
+        </div>
+      )
     },
     {
       position: [0, 0, 50],
-      title: "Valles Marineris",
-      description: "Largest canyon in the solar system",
-      extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
+      title: "Resume / Skills",
+      description: "A list of my skills and qualifications.",
+      customContent:(
+        <div>
+          <p>Resume : <a href="/assets/Tyler_Arroyo_Resume.pdf" target="_blank" rel="pdf">Download Resume</a></p>
+          <br />
+          <img src="/assets/tyler_arroyo_resume.png" alt="Resume" className="w-full h-auto mt-4" />
+        </div>
+      )
     }
   ],
-  hoverText: "Explore Skills",
+  hoverText: "Explore Experience",
   hoverPosition: [160, -75, 0]
 }
 
@@ -88,20 +110,50 @@ export const moonConfig: PlanetConfig = {
     {
       position: [0, -54, 0],
       title: "The Trail",
-      description: "Largest canyon in the solar system",
-      extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
+      description: "Personal Indie Game made using Unreal Engine",
+      customContent: (
+        <div>
+          <p>The Trail is a game that I made in order to learn about Unreal Engine as I didn't have any classes that were teaching it. I wanted to create a small indie game to explore the capabilities of the engine and improve my skills. This game was quite simple as Unreal Engine was definitely overwhelming to begin with. The player traveled along a predetermined path and was able to pick up items along the path. These items included sticks, fur, acorns, and rocks to just name a few. At the end of the path, the player could craft more complex objects and sell them in order to make money and progress through the game.</p>
+          <br/>
+          <p>Through this project, I learned a lot about the Unreal Engine and how to use its various tools and features. I also gained experience in level design, game mechanics, and user interface design. Overall, it was a great learning experience that helped me grow as a game developer.</p>
+          <br/>
+          <p><strong>Skills Used:</strong> Unreal Engine, Blueprints, 3D Modeling, Texturing, Level Design</p>
+          <br/>
+        </div>
+      )
     },
     {
       position: [21.7, -37.5, 35.4],
-      title: "Inventory Management System for Alchemetrics",
-      description: "Largest canyon in the solar system",
-      extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
+      title: "ERP System for Scalibly",
+      description: "An Enterprise Resource Planning system made for small businesses.",
+      customContent: (
+        <div>
+          <p>I started working on this project to help my family members who owned small businesses to better handle their assets and inventory as well as help with any administrative work that the business might need. My brother and I created our business Scalibly to do just that. We found an open source ERP system and customized it to fit our needs for our business. As we learned how to use this system, we had to learn Python in order to make our own scripts to automate workflows and tasks within the ERP system.</p>
+          <br/>
+          <p>Aside from Python, I needed to understand system infrastructure and how to deploy applications for scale. We already knew 4-5 businesses that would need a system like this, so we had to learn how to setup virtual machines to host the docker containers necessary to run the ERP system. These docker containers contained all of the necessary services to run the ERP system, including the database, web server, and any background workers. The database ran using MySQL which was yet another technology we had to learn about.</p>
+          <br/>
+          <p>Through this project, I gained valuable experience in full-stack development, cloud computing, and project management. It was a challenging but rewarding experience that taught me the importance of adaptability and continuous learning in the ever-evolving tech landscape.</p>
+          <br/>
+          <p><strong>Skills Used:</strong> Python, Docker, MySQL, Linux, Virtual Machines, ERP Systems, TailScale, SSH</p>
+          <br/>
+        </div>
+      )
     },
     {
       position: [-17.7, 35.4, -33.7],
       title: "Webpage API",
-      description: "Largest canyon in the solar system",
-      extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
+      description: "Academic Project using APIs to fetch data from webpages.",
+      customContent:(
+        <div>
+          <p>This project involved using an API to fetch data and then display that JSON data onto a webpage. In my case, I used a Rick and Morty API to get information about the characters and episodes. I would then display that information in a user-friendly way on the webpage. This included filters and search functionality to help users find the information they were looking for.</p>
+          <br/>
+          <p>This project helped me learn how to work with APIs and how to manipulate JSON data. I also learned how to use JavaScript to dynamically update the webpage based on user input. Overall, it was a great learning experience that helped me understand the basics of web development and API integration.</p>
+          <br/>
+          <p><strong>Skills Used:</strong> HTML, CSS, JavaScript, APIs, JSON</p>
+          <br/>
+          <p><strong>Github:</strong> <a href="https://github.com/tja9674/235WebTechSpring/tree/main/Project2" target="_blank" className="text-blue-400 underline">https://github.com/tja9674/235WebTechSpring/tree/main/Project2</a></p>
+        </div>
+      )
     },
   ],
   hoverText: "Explore Projects",

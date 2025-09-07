@@ -60,7 +60,19 @@ export default function Home() {
   const handlePlanetClick = (planet: 'mars' | 'moon' | 'earth') => {
     setSelectedPlanet(planet);
     setSidebarContent(null);
-    document.querySelector("#footerText")!.innerHTML = "Click and drag a planet to explore its features!";
+
+    // Automatically focus on the first annotation
+    setFocusedAnnotationIndex(0);
+
+    // Set sidebar content to the first annotation
+    const currentConfig = planet === 'mars' ? marsConfig : 
+                       planet === 'moon' ? moonConfig : earthConfig;
+  
+    if (currentConfig.annotations && currentConfig.annotations.length > 0) {
+      setSidebarContent(currentConfig.annotations[0]);
+    }
+
+    document.querySelector("#footerText")!.innerHTML = "Explore all the features on the planet!";
   };
 
   const adjustMarsForScreenSize = (): [number[], [number, number, number], [number, number, number]] => {
@@ -123,7 +135,7 @@ export default function Home() {
         <Sidebar
           isVisible={!!selectedPlanet}
           side="right"
-          title={selectedPlanet === 'mars' ? 'Skills' : selectedPlanet === 'moon' ? 'Projects' : 'About Me'}
+          title={selectedPlanet === 'mars' ? 'Experience' : selectedPlanet === 'moon' ? 'Projects' : 'About Me'}
         >
           {sidebarContent ? (
     <>
@@ -159,7 +171,7 @@ export default function Home() {
               className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
               onClick={() => setSelectedPlanet('mars')}
             >
-              View Skills
+              View Experience
             </button>
             <button 
               className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
