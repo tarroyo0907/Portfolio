@@ -8,11 +8,10 @@ Title: Mars, Free, low-poly
 
 import React, { useRef, useEffect, useState } from 'react'
 import { useGLTF, Html, PresentationControls } from '@react-three/drei'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame, useThree, extend } from '@react-three/fiber'
 import { a } from '@react-spring/three'
 import { Group, BackSide, ShaderMaterial, Mesh, Object3D, Material, MeshStandardMaterial, MeshPhysicalMaterial, FrontSide, DoubleSide } from 'three';
 import { GLTF } from 'three-stdlib';
-import { extend} from '@react-three/fiber';
 import * as THREE from 'three';
 
 // Custom outline shader material
@@ -44,6 +43,7 @@ const createOutlineMaterial = (side: 'front' | 'back') => new ShaderMaterial({
 
 export interface PlanetAnnotation {
   position: [number, number, number];
+  rotation?: [number, number, number];
   title: string;
   description: string;
   extraInfo?: string;
@@ -104,7 +104,17 @@ const Planet: React.FC<PlanetProps> = ({
     description: string;
     extraInfo?: string;
   }>(null);
+  const { camera } = useThree();
 
+
+  const getAnnotationDistance = (annotation: PlanetAnnotation) => {
+    // Annotation position in world coordinates (assuming planet is at origin)
+    const annotationPos = new THREE.Vector3(...annotation.position);
+    // Camera position
+    const cameraPos = camera.position;
+    // Distance
+    return annotationPos.distanceTo(cameraPos);
+  };
   useFrame(() => {
     if (autoRotate && planetRef.current) {
       planetRef.current.rotation.y += 0.001;
@@ -112,41 +122,23 @@ const Planet: React.FC<PlanetProps> = ({
     }
 
     // Handle annotation focusing
-    if (focusedAnnotationIndex !== undefined && planetRef.current && enableControls) {
-      const annotation = config.annotations[focusedAnnotationIndex];
-      if (rotatedManually) {
-        planetRef.current.rotation.x = 0;
-        planetRef.current.rotation.y = 0;
-        planetRef.current.rotation.z = 0;
-        setRotatedManually(false);
-        console.log('Planet instantly reset to (0,0,0)');
-      }
+    if (
+    focusedAnnotationIndex !== undefined &&
+    planetRef.current &&
+    enableControls
+  ) {
+    const annotation = config.annotations[focusedAnnotationIndex];
+    const annotationPos = new THREE.Vector3(...annotation.position).normalize();
 
-      // Create vectors for calculation
-      const annotationPos = new THREE.Vector3(...annotation.position);
-      const cameraDirection = new THREE.Vector3(0, 0, 1); // Camera looks toward positive Z
-      
-      // We want to rotate the planet so that the annotation faces the camera
-      // This means the annotation should be in the direction opposite to camera
-      const targetDirection = annotationPos.clone().normalize().multiplyScalar(-1);
-      
-      // Calculate required rotations
-      const targetY = Math.atan2(targetDirection.x, targetDirection.z);
-      const targetX = Math.asin(-targetDirection.y); // Negative because we want to bring it forward
-      
-      const lerpFactor = 0.05;
-      
-      // Apply Y rotation with wrapping
-      let deltaY = targetY - planetRef.current.rotation.y;
-      while (deltaY > Math.PI) deltaY -= 2 * Math.PI;
-      while (deltaY < -Math.PI) deltaY += 2 * Math.PI;
-      
-      planetRef.current.rotation.y += deltaY * lerpFactor;
-      planetRef.current.rotation.x += (targetX - planetRef.current.rotation.x) * lerpFactor;
-      
-      // Clamp X rotation
-      planetRef.current.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, planetRef.current.rotation.x));
-    }
+    // The direction you want the annotation to face (camera looks down +Z)
+    const targetDirection = new THREE.Vector3(0, 0, 1);
+
+    // Compute quaternion rotation from annotationPos to targetDirection
+    const quaternion = new THREE.Quaternion().setFromUnitVectors(annotationPos, targetDirection);
+
+    // Smoothly interpolate (slerp) from current rotation to target
+    planetRef.current.quaternion.slerp(quaternion, 0.1); // 0.1 is the lerp factor, adjust for speed
+  }
   })
 
   useEffect(() => {
@@ -208,9 +200,13 @@ const Planet: React.FC<PlanetProps> = ({
   const AnnotationPoints = () => (
     <>
       {config.annotations.map((annotation, index) => (
-        <Html
+        <group
           key={index}
           position={annotation.position}
+          rotation={annotation.rotation}
+        >
+        <Html
+          
           distanceFactor={200}
           occlude
           style={{
@@ -231,6 +227,7 @@ const Planet: React.FC<PlanetProps> = ({
             </div>
           </div>
         </Html>
+        </group>
       ))}
     </>
   );

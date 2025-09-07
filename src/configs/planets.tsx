@@ -42,7 +42,7 @@ export const moonConfig: PlanetConfig = {
   outlineSide: 'back',
   annotations : [
     {
-      position: [50, 0, 0],
+      position: [42.3, 24.0, 19.0],
       title: "Web Portfolio",
       description: "The very site you're on right now!",
       customContent:(
@@ -66,7 +66,7 @@ export const moonConfig: PlanetConfig = {
       )
     },
     {
-      position: [0, 50, 0],
+      position: [-42.3, 24, 19.0],
       title: "Warcry Duel",
       description: "My personal multiplayer Unity game project!",
       customContent: (
@@ -76,24 +76,29 @@ export const moonConfig: PlanetConfig = {
           <p><strong>Skills Used:</strong> Unity, C#, Github, Networking for Game Objects, Blender</p>
           <br/>
           <p><strong>Github:</strong> <a href="https://github.com/tarroyo0907/WarcryDuel" target="_blank" rel="github">https://github.com/tarroyo0907/WarcryDuel</a></p>
-          <img src="/assets/warcry_duel.png" alt="Warcry Duel Screenshot" className="w-full h-auto mt-4" />
+          <video 
+            src="../assets/WarcryVerticalDemo.mp4" 
+            controls 
+            className="w-full h-auto mt-4"
+            poster="../assets/warcry_duel.png"
+          />
         </div>
       )
     },
     {
-      position: [0, 0, 50],
+      position: [0, -54, 0],
       title: "The Trail",
       description: "Largest canyon in the solar system",
       extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
     },
     {
-      position: [0, 0, 50],
+      position: [21.7, -37.5, 35.4],
       title: "Inventory Management System for Alchemetrics",
       description: "Largest canyon in the solar system",
       extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
     },
     {
-      position: [0, 0, 50],
+      position: [-17.7, 35.4, -33.7],
       title: "Webpage API",
       description: "Largest canyon in the solar system",
       extraInfo: "At 4,000 km long and up to 7 km deep, Valles Marineris would stretch from New York to California if placed on Earth. It's believed to have formed by ancient tectonic activity."
