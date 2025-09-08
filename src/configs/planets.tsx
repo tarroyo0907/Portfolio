@@ -12,7 +12,7 @@ export const marsConfig: PlanetConfig = {
     {
       position: [50, 0, 0],
       title: "Jobs / Prior Work Experience",
-      description: "A list of the places that I've worked at and my role there.",
+      description: "A list of the places that I&apos;ve worked at and my role there.",
       customContent:(
         <div>
           <p><strong>Production Metals                            June 2023</strong><br />        
@@ -26,7 +26,7 @@ export const marsConfig: PlanetConfig = {
     {
       position: [0, 50, 0],
       title: "Clubs / Extracurricular Activities",
-      description: "A list of clubs and extracurricular activities that I've participated in.",
+      description: "A list of clubs and extracurricular activities that I&apos;ve participated in.",
       customContent:(
         <div>
           <p>RIT VALORANT Esports <strong>Fall 2023</strong></p>
@@ -66,11 +66,11 @@ export const moonConfig: PlanetConfig = {
     {
       position: [42.3, 24.0, 19.0],
       title: "Web Portfolio",
-      description: "The very site you're on right now!",
+      description: "The very site you&apos;re on right now!",
       customContent:(
         <div> 
           <p>
-            This portfolio was made to showcase the projects that I've made and my development skills. In order to highlight my game development background, I wanted to make a site that incorporated 3D aspects with more interaction for the user.
+            This portfolio was made to showcase the projects that I&apos;ve made and my development skills. In order to highlight my game development background, I wanted to make a site that incorporated 3D aspects with more interaction for the user.
           </p>
           <br className="padding-10"></br>
           <p>
@@ -113,7 +113,7 @@ export const moonConfig: PlanetConfig = {
       description: "Personal Indie Game made using Unreal Engine",
       customContent: (
         <div>
-          <p>The Trail is a game that I made in order to learn about Unreal Engine as I didn't have any classes that were teaching it. I wanted to create a small indie game to explore the capabilities of the engine and improve my skills. This game was quite simple as Unreal Engine was definitely overwhelming to begin with. The player traveled along a predetermined path and was able to pick up items along the path. These items included sticks, fur, acorns, and rocks to just name a few. At the end of the path, the player could craft more complex objects and sell them in order to make money and progress through the game.</p>
+          <p>The Trail is a game that I made in order to learn about Unreal Engine as I didn&apos;t have any classes that were teaching it. I wanted to create a small indie game to explore the capabilities of the engine and improve my skills. This game was quite simple as Unreal Engine was definitely overwhelming to begin with. The player traveled along a predetermined path and was able to pick up items along the path. These items included sticks, fur, acorns, and rocks to just name a few. At the end of the path, the player could craft more complex objects and sell them in order to make money and progress through the game.</p>
           <br/>
           <p>Through this project, I learned a lot about the Unreal Engine and how to use its various tools and features. I also gained experience in level design, game mechanics, and user interface design. Overall, it was a great learning experience that helped me grow as a game developer.</p>
           <br/>
@@ -176,7 +176,7 @@ export const earthConfig: PlanetConfig = {
         customContent: (
           <div className="space-y-4"> 
           <p className="text-white/90">
-           Hello! I'm Tyler Arroyo, a passionate software and game developer. I strive to learn as much as I can in any field that I'm in. I enjoy working with others to create amazing things, and I love a good challenge. Outside of coding, I'm usually rock climbing, working out, or playing video games! Welcome to my portfolio!
+           Hello! I&apos;m Tyler Arroyo, a passionate software and game developer. I strive to learn as much as I can in any field that I&apos;m in. I enjoy working with others to create amazing things, and I love a good challenge. Outside of coding, I&apos;m usually rock climbing, working out, or playing video games! Welcome to my portfolio!
 
            <br/>
            <hr/>
