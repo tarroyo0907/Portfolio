@@ -12,7 +12,7 @@ export const marsConfig: PlanetConfig = {
     {
       position: [50, 0, 0],
       title: "Jobs / Prior Work Experience",
-      description: "A list of the places that I&apos;ve worked at and my role there.",
+      description: "A list of the places that I have worked at and my role there.",
       customContent:(
         <div>
           <p><strong>Production Metals                            June 2023</strong><br />        
@@ -26,7 +26,7 @@ export const marsConfig: PlanetConfig = {
     {
       position: [0, 50, 0],
       title: "Clubs / Extracurricular Activities",
-      description: "A list of clubs and extracurricular activities that I&apos;ve participated in.",
+      description: "A list of clubs and extracurricular activities that I have participated in.",
       customContent:(
         <div>
           <p>RIT VALORANT Esports <strong>Fall 2023</strong></p>

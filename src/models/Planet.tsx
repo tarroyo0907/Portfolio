@@ -111,6 +111,8 @@ const Planet: React.FC<PlanetProps> = ({
   const { camera } = useThree();
 
 
+  useGLTF.preload(config.modelPath);
+  
   const getAnnotationDistance = (annotation: PlanetAnnotation) => {
     // Annotation position in world coordinates (assuming planet is at origin)
     const annotationPos = new THREE.Vector3(...annotation.position);
@@ -307,9 +309,7 @@ const Planet: React.FC<PlanetProps> = ({
   );
 }
 
-useGLTF.preload('/assets/mars_planet.glb');
-useGLTF.preload('/assets/the_moon.glb');
-useGLTF.preload('/assets/earth.glb');
+
 
 export default Planet;
 
