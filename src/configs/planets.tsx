@@ -66,7 +66,7 @@ export const moonConfig: PlanetConfig = {
     {
       position: [42.3, 24.0, 19.0],
       title: "Web Portfolio",
-      description: "The very site you&apos;re on right now!",
+      description: "The very site you are on right now!",
       customContent:(
         <div> 
           <p>

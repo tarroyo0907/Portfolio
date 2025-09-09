@@ -80,6 +80,8 @@ interface PlanetProps {
   onHoverEnd?: () => void;
   autoRotate?: boolean;
   focusedAnnotationIndex?: number;
+  visitedCount?: number;
+  totalFeatures?: number;
 }
 const Planet: React.FC<PlanetProps> = ({ 
   config, 
@@ -91,6 +93,8 @@ const Planet: React.FC<PlanetProps> = ({
   onHoverEnd,
   autoRotate,
   focusedAnnotationIndex,
+  visitedCount,
+  totalFeatures,
   ...props 
 }) => {
   const [isClient, setIsClient] = useState(false);
@@ -192,7 +196,15 @@ const Planet: React.FC<PlanetProps> = ({
     >
       <div className="bg-black bg-opacity-50 rounded-lg px-4 py-2 text-white text-1024 whitespace-nowrap">
         {config.hoverText || config.name}
+      {visitedCount !== undefined && totalFeatures !== undefined && (
+          <div className="mt-2 text-green-400 font-bold text-lg">
+            {visitedCount === totalFeatures
+              ? "Fully Discovered!"
+              : `Discovered: ${visitedCount}/${totalFeatures}`}
+          </div>
+      )}
       </div>
+      
     </Html>
     );
 };

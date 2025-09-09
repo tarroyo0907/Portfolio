@@ -19,6 +19,11 @@ export default function Home() {
   const [leftSidebarVisible, setLeftSidebarVisible] = useState(false);
   const [rightSidebarVisible, setRightSidebarVisible] = useState(false);
   const [focusedAnnotationIndex, setFocusedAnnotationIndex] = useState<number | undefined>(undefined);
+  const [visitedFeatures, setVisitedFeatures] = useState({
+    mars: new Set<number>(),
+    moon: new Set<number>(),
+    earth: new Set<number>(),
+  });
 
   useEffect(() => {
     // This code will only run on the client
@@ -38,6 +43,14 @@ export default function Home() {
     if (annotation) {
       setSidebarContent(annotation);
     }
+    if (selectedPlanet) {
+      setVisitedFeatures(prev => {
+        const updated = { ...prev };
+        updated[selectedPlanet] = new Set(updated[selectedPlanet]);
+        updated[selectedPlanet].add(annotationIndex);
+        return updated;
+      });
+  }
   };
 
   const getCurrentPlanetConfig = () => {
@@ -63,6 +76,12 @@ export default function Home() {
 
     // Automatically focus on the first annotation
     setFocusedAnnotationIndex(0);
+    setVisitedFeatures(prev => {
+      const updated = { ...prev };
+      updated[planet] = new Set(updated[planet]);
+      updated[planet].add(0);
+      return updated;
+    });
 
     // Set sidebar content to the first annotation
     const currentConfig = planet === 'mars' ? marsConfig : 
@@ -253,6 +272,8 @@ export default function Home() {
                   onHoverStart={() => setHoveredPlanet('mars')}
                   onHoverEnd={() => setHoveredPlanet(null)}
                   autoRotate={!selectedPlanet}
+                  visitedCount={visitedFeatures.mars.size}
+                  totalFeatures={marsConfig.annotations.length}
                   focusedAnnotationIndex={selectedPlanet === 'mars' ? focusedAnnotationIndex : undefined}
                 />
               )}
@@ -270,6 +291,8 @@ export default function Home() {
                   onHoverStart={() => setHoveredPlanet('moon')}
                   onHoverEnd={() => setHoveredPlanet(null)}
                   autoRotate={!selectedPlanet}
+                  visitedCount={visitedFeatures.moon.size}
+                  totalFeatures={moonConfig.annotations.length}
                   focusedAnnotationIndex={selectedPlanet === 'moon' ? focusedAnnotationIndex : undefined}
                 />
               )}
@@ -287,6 +310,8 @@ export default function Home() {
                   onHoverStart={() => setHoveredPlanet('earth')}
                   onHoverEnd={() => setHoveredPlanet(null)}
                   autoRotate={!selectedPlanet}
+                  visitedCount={visitedFeatures.earth.size}
+                  totalFeatures={earthConfig.annotations.length}
                   focusedAnnotationIndex={selectedPlanet === 'earth' ? focusedAnnotationIndex : undefined}
                 />
               )}
@@ -311,7 +336,18 @@ export default function Home() {
           </Suspense>
         </Canvas>
     </section>
-    <Footer />
+    <Footer 
+      visited={{
+        mars: visitedFeatures.mars.size,
+        moon: visitedFeatures.moon.size,
+        earth: visitedFeatures.earth.size
+      }}
+      totals={{
+        mars: marsConfig.annotations.length,
+        moon: moonConfig.annotations.length,
+        earth: earthConfig.annotations.length
+      }}
+    />
     </>
   )
 }
