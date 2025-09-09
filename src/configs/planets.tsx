@@ -2,7 +2,7 @@ import { PlanetConfig } from '../models/Planet'
 
 export const marsConfig: PlanetConfig = {
   name: 'Experience',
-  modelPath: '/assets/mars_planet.glb',
+  modelPath: '/assets/mars_planet_optimized.glb',
   meshName: 'LowpolyMars_lowpolymarsmat_0',
   materialName: 'lowpolymarsmat',
   scale: [5000,  5000.001, 5000],
@@ -56,7 +56,7 @@ export const marsConfig: PlanetConfig = {
 
 export const moonConfig: PlanetConfig = {
   name: 'Projects',
-  modelPath: '/assets/the_moon.glb',
+  modelPath: '/assets/the_moon_optimized.glb',
   meshName: 'defaultMaterial',
   materialName: 'Material__50',
   scale: [5000, 5000.001, 5000],
@@ -162,7 +162,7 @@ export const moonConfig: PlanetConfig = {
 
 export const earthConfig: PlanetConfig = {
     name: 'About Me',
-    modelPath: '/assets/planet_earth.glb',
+    modelPath: '/assets/planet_earth_optimized.glb',
     meshName: 'Earth_Diffuse_6K_Earth_Diffuse_6Kmain_0',
     materialName: 'Earth_Diffuse_6K.main',
     scale: [16000, 16000.001, 16000],

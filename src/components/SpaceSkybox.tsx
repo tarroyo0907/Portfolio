@@ -2,27 +2,31 @@ import { useThree, useFrame } from '@react-three/fiber'
 import { CubeTextureLoader, LinearMipmapLinearFilter, LinearFilter, BackSide } from 'three'
 import { Mesh, ShaderMaterial } from 'three'
 import * as THREE from 'three'
-import { useMemo, useEffect, useRef } from 'react'
+import { useMemo, useEffect, useRef, useState } from 'react'
 
 const SpaceSkybox = () => {
   const { scene } = useThree()
   const skyboxRef = useRef<THREE.Object3D | null>(null)
+  const [texturesLoaded, setTexturesLoaded] = useState(false)
 
   const loader = new CubeTextureLoader()
-  const texture = loader.load([
-    '/assets/skybox/galaxy+X.png', // front
-    '/assets/skybox/galaxy+Y.png', // back
-    '/assets/skybox/galaxy+Z.png', // up
-    '/assets/skybox/galaxy-X.png', // down
-    '/assets/skybox/galaxy-Y.png', // right
-    '/assets/skybox/galaxy-Z.png'  // left
-  ])
+  const texture = useMemo(() => {
+    const tex = loader.load([
+      '/assets/skybox/galaxy+X.png',
+      '/assets/skybox/galaxy+Y.png', 
+      '/assets/skybox/galaxy+Z.png',
+      '/assets/skybox/galaxy-X.png',
+      '/assets/skybox/galaxy-Y.png',
+      '/assets/skybox/galaxy-Z.png'
+  ], () => setTexturesLoaded(true))
 
   // Improve texture quality
-  texture.minFilter = LinearMipmapLinearFilter
-  texture.magFilter = LinearFilter
-  texture.generateMipmaps = true
-
+  tex.minFilter = LinearMipmapLinearFilter
+  tex.magFilter = LinearFilter
+  tex.generateMipmaps = true
+  return tex
+  }, [])
+  
   // Create a custom shader material that ignores lighting
   const { skyboxMaterial, skybox } = useMemo(() => {
     const material = new ShaderMaterial({
@@ -73,6 +77,6 @@ const SpaceSkybox = () => {
   }, [scene, skybox, skyboxMaterial])
 
   return null
-}
+};
 
 export default SpaceSkybox

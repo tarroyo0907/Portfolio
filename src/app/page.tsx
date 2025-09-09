@@ -260,7 +260,7 @@ export default function Home() {
 
             {/* Planets */}
             <group>
-              {/* Only render Mars if it's selected or no planet is selected */}
+              <Suspense fallback={null}>
               {(!selectedPlanet || selectedPlanet === 'mars') && (
                 <Planet
                   config={marsConfig}
@@ -278,8 +278,9 @@ export default function Home() {
                   focusedAnnotationIndex={selectedPlanet === 'mars' ? focusedAnnotationIndex : undefined}
                 />
               )}
+              </Suspense>
               
-              {/* Only render Moon if it's selected or no planet is selected */}
+              <Suspense fallback={null}>
               {(!selectedPlanet || selectedPlanet === 'moon') && (
                 <Planet
                   config={moonConfig}
@@ -297,8 +298,9 @@ export default function Home() {
                   focusedAnnotationIndex={selectedPlanet === 'moon' ? focusedAnnotationIndex : undefined}
                 />
               )}
+              </Suspense>
               
-              {/* Only render Earth if it's selected or no planet is selected */}
+              <Suspense fallback={null}>
               {(!selectedPlanet || selectedPlanet === 'earth') && (
                 <Planet
                   config={earthConfig}
@@ -316,6 +318,7 @@ export default function Home() {
                   focusedAnnotationIndex={selectedPlanet === 'earth' ? focusedAnnotationIndex : undefined}
                 />
               )}
+              </Suspense>
 
               {/* Back Button */}
               {selectedPlanet && (
