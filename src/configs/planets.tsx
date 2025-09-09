@@ -5,8 +5,8 @@ export const marsConfig: PlanetConfig = {
   modelPath: '/assets/mars_planet.glb',
   meshName: 'LowpolyMars_lowpolymarsmat_0',
   materialName: 'lowpolymarsmat',
-  scale: [5000,  5000.001, 5000],
-  outlineScale: [5050, 5050.001, 5050],
+  scale: [500, 500, 500],
+  outlineScale: [500, 500, 500],
   outlineSide: 'back',
   annotations : [
     {
@@ -59,8 +59,8 @@ export const moonConfig: PlanetConfig = {
   modelPath: '/assets/the_moon.glb',
   meshName: 'defaultMaterial',
   materialName: 'Material__50',
-  scale: [5000, 5000.001, 5000],
-  outlineScale: [5050, 5050.001, 5050],
+  scale: [500, 500, 500],
+  outlineScale: [500, 500, 500],
   outlineSide: 'back',
   annotations : [
     {
@@ -165,8 +165,8 @@ export const earthConfig: PlanetConfig = {
     modelPath: '/assets/planet_earth.glb',
     meshName: 'Earth_Diffuse_6K_Earth_Diffuse_6Kmain_0',
     materialName: 'Earth_Diffuse_6K.main',
-    scale: [16000, 16000.001, 16000],
-    outlineScale: [16050, 16050, 16050],
+  scale: [500, 500, 500],
+  outlineScale: [500, 500, 500],
     outlineSide: 'front',
     annotations : [
       {
