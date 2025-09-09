@@ -1,10 +1,11 @@
 'use client'
-import React, { Suspense, useRef, useEffect, useState } from 'react'
+import React, { Suspense, useRef, useEffect, useState, lazy } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, CameraControls, Html, Stats } from '@react-three/drei'
 import { marsConfig, moonConfig, earthConfig } from '../configs/planets'
-import Planet from '@/models/Planet'
 import { Loader, SpaceSkybox, Navbar, Footer, Sidebar } from '@/components'
+
+const Planet = lazy(() => import('@/models/Planet'));
         
 export default function Home() {
   const [selectedPlanet, setSelectedPlanet] = useState<'mars' | 'moon' | 'earth' | null>(null);
